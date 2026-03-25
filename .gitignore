@@ -3,6 +3,8 @@
 .RData
 .Ruserdata
 MeteoProducts.Rproj
+_old/
+Docs/
 Data/0_Temp/
 Data/1_Input/_old/
 Data/1_Input/API_KEY/*
@@ -12,6 +14,5 @@ Data/2_Intermediate/*
 !Data/2_Intermediate/.gitkeep
 Data/3_Output/*
 !Data/3_Output/.gitkeep
-Scripts/_old/
-Docs/
-
+Scripts/*
+!Scripts/005_API_Veenkampen_to_XLSX.R
