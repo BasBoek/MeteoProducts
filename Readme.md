@@ -20,11 +20,8 @@ The script can:
 ├── .here
 ├── README.md
 ├── Scripts/
-│   ├── main_download_script.R
+│   ├── 005_Download_Weather_Veenkampen.R
 │   └── Functions/
-│       ├── fetch_data.R
-│       ├── aggregator.R
-│       └── read_assess_and_combine_excel_sheets.R
 └── Data/
     ├── 1_Input/
     │   └── API_request_parameters.csv
@@ -36,22 +33,47 @@ The `.here` file marks the project root. The script uses `here::here()` so it ca
 
 ## Input
 
-Settings are defined in:
+The script uses two input components:
+
 ```text
 Data/1_Input/API_request_parameters.csv
+Data/1_Input/API_KEY/api_key.txt
 ```
 
-This file contains the API key, date range, selected variables, measurement frequencies, and requested statistics.
+The parameter file contains the date range, selected variables, measurement frequencies, and requested statistics.
 
-Dates should use this format:
+The application programming interface (API) key is stored separately in:
+
+```text
+Data/1_Input/API_KEY/api_key.txt
+```
+
+This file should contain only the API key, on one line, without quotes.
+
+Example structure:
+
+```text
+Data/
+└── 1_Input/
+    ├── API_request_parameters.csv
+    └── API_KEY/
+        └── api_key.txt
+```
+
+Do not commit your real API key to GitHub. The folder `Data/1_Input/API_KEY/` is ignored by Git, except for an optional `.gitkeep` file that keeps the folder visible in the repository.
+
+Dates in `API_request_parameters.csv` should use this format:
+
 ```text
 YYYY__MM__DD
 ```
 
 Example:
+
 ```text
 2024__03__23
 ```
+
 
 Do not commit a real API key to GitHub. Prefer committing an example parameter file and keeping the real file private.
 

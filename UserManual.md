@@ -26,29 +26,51 @@ This is the file that the script reads.
 
 ### Step 3: Add your API key
 
-Open:
+The application programming interface (API) key is not stored in the parameter sheet. It is stored in a separate text file, so it can be kept out of GitHub.
+
+Create this folder if it does not already exist:
+
+```text
+Data/1_Input/API_KEY/
+```
+
+Inside that folder, create a text file called:
+
+```text
+api_key.txt
+```
+
+The full path should be:
+
+```text
+Data/1_Input/API_KEY/api_key.txt
+```
+
+Open `api_key.txt` and paste your API key into the file.
+
+The file should contain only the key itself, for example:
+
+```text
+your_api_key_here
+```
+
+Do not add quotes, column names, or extra text.
+
+The script reads the key from this file using:
+
+```r
+API_KEY <- trimws(readLines("Data/1_Input/API_KEY/api_key.txt", warn = FALSE)[1])
+```
+
+This keeps the key separate from:
 
 ```text
 Data/1_Input/API_request_parameters.csv
 ```
 
-Find the column:
+The parameter sheet is used for the date range, variable selection, measurement frequency, and statistics settings.
 
-```text
-API_key
-```
-
-Replace:
-
-```text
-PUT_YOUR_API_KEY_STRING_HERE
-```
-
-with your real API key.
-
-The script reads the API key from the first row of this column. If the placeholder is still present, the script stops.
-
-Do not commit the real API key to GitHub.
+Do not commit `api_key.txt` to GitHub.
 
 ### Step 4: Fill in the date range
 
