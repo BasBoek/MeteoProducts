@@ -15,4 +15,4 @@ Data/2_Intermediate/*
 Data/3_Output/*
 !Data/3_Output/.gitkeep
 Scripts/*
-!Scripts/005_API_Veenkampen_to_XLSX.R
+!Scripts/005_Download_Weather_Veenkampen.R
