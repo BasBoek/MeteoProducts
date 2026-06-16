@@ -1,0 +1,130 @@
+# Veenkampen Weather API Downloader
+
+This project downloads weather data from the Veenkampen weather station application programming interface (API). The user defines the date range, variables, and desired summary statistics in a parameter file. The script then downloads the selected data, stores intermediate files, and writes a final Microsoft Excel workbook (XLSX).
+
+## Goal
+
+The goal of this script is to make Veenkampen weather data exports reproducible and easy to configure.
+
+The script can:
+
+* download selected weather variables
+* handle one or more date ranges
+* split raw data by measurement interval
+* calculate hourly, daily, and daylight-period statistics
+* write all results to one XLSX file
+
+## Project structure
+
+```text
+.
+├── .here
+├── README.md
+├── Scripts/
+│   ├── main_download_script.R
+│   └── Functions/
+│       ├── fetch_data.R
+│       ├── aggregator.R
+│       └── read_assess_and_combine_excel_sheets.R
+└── Data/
+    ├── 1_Input/
+    │   └── API_request_parameters.csv
+    ├── 2_Intermediate/
+    └── 3_Output/
+```
+
+The `.here` file marks the project root. The script uses `here::here()` so it can be run without relying on RStudio.
+
+## Input
+
+Settings are defined in:
+
+```text
+Data/1_Input/API_request_parameters.csv
+```
+
+This file contains the API key, date range, selected variables, measurement frequencies, and requested statistics.
+
+Dates should use this format:
+
+```text
+YYYY__MM__DD
+```
+
+Example:
+
+```text
+2024__01__01
+```
+
+Do not commit a real API key to GitHub. Prefer committing an example parameter file and keeping the real file private.
+
+## Running the script
+
+From R:
+
+```r
+source("Scripts/main_download_script.R")
+```
+
+From the command line:
+
+```bash
+Rscript Scripts/main_download_script.R
+```
+
+The script creates intermediate comma-separated values (CSV) files during the download and then combines them into the final XLSX file.
+
+## Output
+
+Intermediate files are written to:
+
+```text
+Data/2_Intermediate/
+```
+
+The final XLSX export is written to:
+
+```text
+Data/3_Output/
+```
+
+The workbook contains metadata, raw data sheets for the available measurement intervals, and statistics sheets when requested.
+
+## Statistics
+
+The script can calculate statistics per:
+
+* hour
+* full day
+* daylight period
+
+Daylight is calculated from sunrise and sunset times at the Veenkampen weather station location.
+
+All timestamps from the API are in Coordinated Universal Time (UTC). Convert them separately if local time is needed.
+
+## Notes and limitations
+
+Large requests can take a long time. Downloading many variables for long periods may also cause server timeout errors.
+
+Microsoft Excel has a row limit of 1,048,576 rows per sheet. For high-frequency data, avoid requesting too long a period in one export.
+
+If a timeout occurs, rerun the script or reduce the number of variables or the length of the requested period.
+
+## Recommended `.gitignore`
+
+```text
+Data/1_Input/API_request_parameters.csv
+Data/2_Intermediate/
+Data/3_Output/
+*.xlsx
+.Rhistory
+.RData
+.Rproj.user/
+```
+
+Commit an example input file instead, for example:
+
+```text
+Data/1_Input/API_request_parameters_example.csv
+```
