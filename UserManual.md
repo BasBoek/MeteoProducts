@@ -1,4 +1,4 @@
-## Set-up
+# Set-up Workflow
 
 Follow these steps before running the script.
 
@@ -8,65 +8,23 @@ To download data, you need a valid Veenkampen application programming interface 
 
 Ask the Veenkampen API provider, data manager, or project administrator for access. The script does not create an API key itself; it only uses an existing key.
 
-### Step 2: Copy the input example
 
-Use the example input file as a template:
-
-```text
-Data/1_Input/API_request_parameters_example.csv
-```
-
-Copy it and rename the copy to:
-
-```text
-Data/1_Input/API_request_parameters.csv
-```
-
-This is the file that the script reads.
-
-### Step 3: Add your API key
+### Step 2: Add your API key
 
 The application programming interface (API) key is not stored in the parameter sheet. It is stored in a separate text file, so it can be kept out of GitHub.
 
 Create this folder if it does not already exist:
 
-```text
-Data/1_Input/API_KEY/
-```
-
-Inside that folder, create a text file called:
-
-```text
-api_key.txt
-```
-
-The full path should be:
+Put your API string in this file:
 
 ```text
 Data/1_Input/API_KEY/api_key.txt
 ```
 
-Open `api_key.txt` and paste your API key into the file.
+The file should contain only the key itself. Do not add quotes, column names, or extra text.
 
-The file should contain only the key itself, for example:
 
-```text
-your_api_key_here
-```
-
-Do not add quotes, column names, or extra text.
-
-The script reads the key from this file using:
-
-```r
-API_KEY <- trimws(readLines("Data/1_Input/API_KEY/api_key.txt", warn = FALSE)[1])
-```
-
-This keeps the key separate from:
-
-```text
-Data/1_Input/API_request_parameters.csv
-```
+## Parameter sheet
 
 The parameter sheet is used for the date range, variable selection, measurement frequency, and statistics settings.
 
@@ -87,11 +45,6 @@ Dates should be written as:
 YYYY__MM__DD
 ```
 
-Example:
-
-```text
-2024__01__01
-```
 
 You can define more than one date range by filling in multiple rows.
 
