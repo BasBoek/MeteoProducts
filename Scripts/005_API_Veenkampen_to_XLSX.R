@@ -39,29 +39,42 @@ options(digits = 15)
 
 # Clean environment and set working directory
 rm(list=ls())
-setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 
-# Load required libraries
 if(!requireNamespace("easypackages")) install.packages("easypackages")
 library(easypackages)
-easypackages::packages(c("httr", "jsonlite", "plyr", "dplyr", "tidyr", "lubridate", "openxlsx", "rstudioapi", "bioRad"), prompt = FALSE)
-source("Functions/fetch_data.R") # API REQUEST FUNCTION
-source("Functions/aggregator.R")
-source("Functions/read_assess_and_combine_excel_sheets.R") # Combine all written sheets to prepare for day aggregates
+easypackages::packages(c("here", "httr", "jsonlite", "plyr", "dplyr", "tidyr", "lubridate", "openxlsx", "rstudioapi", "bioRad"), prompt = FALSE)
+
+setwd(here::here())
+
+
+# Load required libraries
+source("Scripts/Functions/fetch_data.R") # API REQUEST FUNCTION
+source("Scripts/Functions/aggregator.R")
+source("Scripts/Functions/read_assess_and_combine_excel_sheets.R") # Combine all written sheets to prepare for day aggregates
 
 
 ## READ PARAMETER DATA. USER PREFERENCES (TIME RANGE + VARIABLE SELECTION) SHOULD BE INDICATED
 ##############################################################################
 
 # Read input parameters (two options to make it generic for ',' and ';' separating csv files.
-df_API_pars                          <- read.csv("../Data/1_Input/API_request_parameters.csv", stringsAsFactors = F, sep=";", fileEncoding="latin1")
-if(ncol(df_API_pars)==1){df_API_pars <- read.csv("../Data/1_Input/API_request_parameters.csv", stringsAsFactors = F, sep=",", fileEncoding="latin1")}
+df_API_pars                          <- read.csv("Data/1_Input/API_request_parameters.csv", stringsAsFactors = F, sep=";", fileEncoding="latin1")
+if(ncol(df_API_pars)==1){df_API_pars <- read.csv("Data/1_Input/API_request_parameters.csv", stringsAsFactors = F, sep=",", fileEncoding="latin1")}
+
 
 
 ## DEFINE 'API REQUEST VARIABLES' BEFORE APPROACHING THE SERVER 
 ##############################################################################
 
+
 API_KEY             <- df_API_pars$API_key[1]   
+
+# Check
+if(API_KEY == "PUT_YOUR_API_KEY_STRING_HERE"){
+  stop("You haven't placed your API KEY yet in the parameter file.")
+} else { 
+  print("String stored in the right location")
+}
+
 
 nr_defined_ranges   <- length(df_API_pars$Date_start[nchar(df_API_pars$Date_start) > 0])
 
@@ -95,11 +108,11 @@ for(i in 1:nr_defined_ranges){
   
   if(i==1){
     LOC     <- paste0(Sys.getenv("USERNAME"),"__", moment)
-    dir.create(paste0("../Data/2_Intermediate/", LOC))
+    dir.create(paste0("Data/2_Intermediate/", LOC))
   }
   
   LOC_SUB   <- paste0(  LOC, "/", gsub("-","", as.character(FINAL_START)), "_", gsub("-", "", as.character(FINAL_END) )  )
-  dir.create(paste0("../Data/2_Intermediate/", LOC_SUB))
+  dir.create(paste0("Data/2_Intermediate/", LOC_SUB))
   
   
   ## DO THE API REQUEST USING THE INPUT DEFINED ABOVE
@@ -118,7 +131,7 @@ for(i in 1:nr_defined_ranges){
     
     for(INTERVAL in intervals){
       
-      FILENAME       <- paste0("../Data/2_Intermediate/", LOC_SUB, "/Veenkampen_", YEARMONTH, "__", INTERVAL, ".csv")
+      FILENAME       <- paste0("Data/2_Intermediate/", LOC_SUB, "/Veenkampen_", YEARMONTH, "__", INTERVAL, ".csv")
       
       # SELECTION OF VARIABLES BASED ON THEIR INTERVAL
       VARS_SEL       <- df_vars_sel$Var_name[df_vars_sel$Frequency == INTERVAL]
@@ -136,7 +149,7 @@ for(i in 1:nr_defined_ranges){
 ##############################################################################
 
 # Where to store new excel file with metadata
-XLSX_LOC    <- paste0("../Data/3_Output/Export_Veenkampen___", LOC, ".xlsx")
+XLSX_LOC    <- paste0("Data/3_Output/Export_Veenkampen___", LOC, ".xlsx")
 wb          <- createWorkbook()
 addWorksheet(wb, "Metadata Export")
 addWorksheet(wb, "Metadata Variables")
@@ -207,10 +220,10 @@ write_weather_sheets <- function(PATTERN_MIN, FOLDER_LOC, XLSX_LOC){
 }
 
 # Write data to excel file into the corresponding sheet
-write_weather_sheets("01min", paste0("../Data/2_Intermediate/", LOC), XLSX_LOC)
-write_weather_sheets("05min", paste0("../Data/2_Intermediate/", LOC), XLSX_LOC)
-write_weather_sheets("30min", paste0("../Data/2_Intermediate/", LOC), XLSX_LOC)
-write_weather_sheets("60min", paste0("../Data/2_Intermediate/", LOC), XLSX_LOC)
+write_weather_sheets("01min", paste0("Data/2_Intermediate/", LOC), XLSX_LOC)
+write_weather_sheets("05min", paste0("Data/2_Intermediate/", LOC), XLSX_LOC)
+write_weather_sheets("30min", paste0("Data/2_Intermediate/", LOC), XLSX_LOC)
+write_weather_sheets("60min", paste0("Data/2_Intermediate/", LOC), XLSX_LOC)
 
 
 ## ADD DAILY AGGREGATES TO EXCEL FILE
