@@ -53,6 +53,24 @@ source("Scripts/Functions/aggregator.R")
 source("Scripts/Functions/read_assess_and_combine_excel_sheets.R") # Combine all written sheets to prepare for day aggregates
 
 
+## DO YOU HAVE AN API?
+##############################################################################
+
+api_key_file         <- "Data/1_Input/API_KEY/api_key.txt"
+
+if(!file.exists(api_key_file)) {
+  stop("WAIT: API key file not found. Copy Data/1_Input/API_KEY/api_key_example.txt to Data/1_Input/API_KEY/api_key.txt and paste your real application programming interface (API) key there.")
+}
+
+API_KEY <- trimws(readLines(api_key_file, warn = FALSE)[1])
+
+if(is.na(API_KEY) || API_KEY == "" || API_KEY == "PUT_YOUR_API_KEY_STRING_HERE") {
+  stop("WAIT: You haven't placed your API key yet in Data/1_Input/API_KEY/api_key.txt")
+} else {
+  print("GOOD: API key found.")
+}
+
+
 ## READ PARAMETER DATA. USER PREFERENCES (TIME RANGE + VARIABLE SELECTION) SHOULD BE INDICATED
 ##############################################################################
 
@@ -60,23 +78,8 @@ source("Scripts/Functions/read_assess_and_combine_excel_sheets.R") # Combine all
 df_API_pars                          <- read.csv("Data/1_Input/API_request_parameters.csv", stringsAsFactors = F, sep=";", fileEncoding="latin1")
 if(ncol(df_API_pars)==1){df_API_pars <- read.csv("Data/1_Input/API_request_parameters.csv", stringsAsFactors = F, sep=",", fileEncoding="latin1")}
 
-
-
-## DEFINE 'API REQUEST VARIABLES' BEFORE APPROACHING THE SERVER 
-##############################################################################
-
-
-API_KEY             <- df_API_pars$API_key[1]   
-
-# Check
-if(API_KEY == "PUT_YOUR_API_KEY_STRING_HERE"){
-  stop("You haven't placed your API KEY yet in the parameter file.")
-} else { 
-  print("String stored in the right location")
-}
-
-
 nr_defined_ranges   <- length(df_API_pars$Date_start[nchar(df_API_pars$Date_start) > 0])
+
 
 
 for(i in 1:nr_defined_ranges){
