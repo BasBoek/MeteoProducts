@@ -7,12 +7,11 @@ This project downloads weather data from the Veenkampen weather station applicat
 The goal of this script is to make Veenkampen weather data exports reproducible and easy to configure.
 
 The script can:
-
-* download selected weather variables
-* handle one or more date ranges
-* split raw data by measurement interval
-* calculate hourly, daily, and daylight-period statistics
-* write all results to one XLSX file
+* Download selected weather variables
+* Handle one or more date ranges
+* Split raw data by measurement interval
+* Calculate hourly, daily, and daylight-period statistics
+* Write all results to one XLSX file
 
 ## Project structure
 
@@ -38,7 +37,6 @@ The `.here` file marks the project root. The script uses `here::here()` so it ca
 ## Input
 
 Settings are defined in:
-
 ```text
 Data/1_Input/API_request_parameters.csv
 ```
@@ -46,15 +44,13 @@ Data/1_Input/API_request_parameters.csv
 This file contains the API key, date range, selected variables, measurement frequencies, and requested statistics.
 
 Dates should use this format:
-
 ```text
 YYYY__MM__DD
 ```
 
 Example:
-
 ```text
-2024__01__01
+2024__03__23
 ```
 
 Do not commit a real API key to GitHub. Prefer committing an example parameter file and keeping the real file private.
@@ -62,13 +58,11 @@ Do not commit a real API key to GitHub. Prefer committing an example parameter f
 ## Running the script
 
 From R:
-
 ```r
 source("Scripts/main_download_script.R")
 ```
 
 From the command line:
-
 ```bash
 Rscript Scripts/main_download_script.R
 ```
@@ -78,13 +72,11 @@ The script creates intermediate comma-separated values (CSV) files during the do
 ## Output
 
 Intermediate files are written to:
-
 ```text
 Data/2_Intermediate/
 ```
 
 The final XLSX export is written to:
-
 ```text
 Data/3_Output/
 ```
@@ -124,7 +116,6 @@ Data/3_Output/
 ```
 
 Commit an example input file instead, for example:
-
 ```text
 Data/1_Input/API_request_parameters_example.csv
 ```
