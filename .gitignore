@@ -7,7 +7,7 @@ _old/
 Docs/
 Data/0_Temp/
 Data/1_Input/_old/
-Data/1_Input/API_KEY/*
+Data/1_Input/API_KEY/api_key.txt
 !Data/1_Input/API_KEY/.gitkeep
 Data/1_Input/Weather_stations/
 Data/2_Intermediate/*
